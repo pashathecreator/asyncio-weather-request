@@ -10,7 +10,8 @@ async def get_weather(city):
 
         async with session.get(url=url, params=params) as response:
             weather_json = await response.json()
-            print(f'{city}: {weather_json["weather"][0]["main"]}]')
+            return f'{city}: {weather_json["weather"][0]["main"]}]'
+
 
 
 async def main(cities_):
@@ -18,8 +19,10 @@ async def main(cities_):
     for city in cities_:
         tasks.append(asyncio.create_task(get_weather(city)))
 
-    for task in tasks:
-        await task
+    results = await asyncio.gather(*tasks)
+
+    for result in results:
+        print(result)
 
 
 cities = ['Moscow', 'St. Petersburg', 'Rostov-on-Don', 'Kaliningrad', 'Vladivostok',
